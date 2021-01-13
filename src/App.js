@@ -54,6 +54,87 @@ import Person from './Person/Person';
 
 //   export default App;
 
+// class App extends Component {
+//   state = {
+//     persons: [
+//       { name: "Max", age: 28 },
+//       { name : "Manu", age : 29 },
+//       { name : "Step", age : 26 }
+//     ],
+//     otherState: "some other value",
+//     showPersons: false
+//   }
+
+//   switchNameHandler = (newName) => {
+//     // this.state.persons[0].name = "Maximailian"
+//     this.setState({ persons : [
+//       { name: newName, age: 28 },
+//       { name : "Manu", age : 29 },
+//       { name : "Step", age : 30 }
+//     ]})
+//   }
+
+//   nameChangeHandler = (event) =>{
+//     console.log(event.target.value);
+//     this.setState({ 
+//       persons : [
+//         { name:  "Max", age: 28 },
+//         { name : event.target.value , age : 29 },
+//         { name : "Step", age : 26 }
+//     ]})
+//   }
+
+//   togglePersonsHandler = () => {
+//     const doesShow = this.state.showPersons;
+//     this.setState({showPersons: !doesShow});
+//   }
+
+//   render() {
+//     const style = {
+//       backgroundColor: 'white',
+//       font: 'inherit',
+//       border: '1px solid blue',
+//       padding: '8px',
+//       cursor: 'pointer'
+//     };
+
+//     let persons = null; 
+
+//     if(this.state.showPersons){
+//       persons = (
+//         <div>
+//               <Person 
+//                 name={this.state.persons[0].name} 
+//                 age ={this.state.persons[0].age}/>
+//               <Person 
+//                 name={this.state.persons[1].name} 
+//                 age ={this.state.persons[1].age} click = {this.switchNameHandler.bind(this, 'Lina')}
+//                 changed={this.nameChangeHandler}>My Hobby : racing </Person> 
+//               <Person 
+//                 name={this.state.persons[2].name} 
+//                 age ={this.state.persons[2].age}/>
+//             </div> 
+//       );
+//     }
+
+//     return (
+//       <div className = "App">
+//          <h1> Hi I am a react app</h1> 
+//          <h2> Reactt</h2>
+//         <button 
+//           style={style}
+//           onClick = {this.togglePersonsHandler} >Toggle</button>
+//           {persons}
+//       </div>
+//     );
+//   }
+// }
+// export default App;
+
+// { 
+//             this.state.showPersons === true ? : null}
+
+
 class App extends Component {
   state = {
     persons: [
@@ -64,11 +145,8 @@ class App extends Component {
     otherState: "some other value",
     showPersons: false
   }
-  // event handler
+
   switchNameHandler = (newName) => {
-    // I want to add state
-    // console.log("Was clicked!")
-    // this this would refer sate with ES6 function
     // this.state.persons[0].name = "Maximailian"
     this.setState({ persons : [
       { name: newName, age: 28 },
@@ -85,6 +163,15 @@ class App extends Component {
         { name : event.target.value , age : 29 },
         { name : "Step", age : 26 }
     ]})
+  }
+
+  deletePersonHandler = (personIndex) => {
+    // const persons = this.state.persons.slice();
+    const persons = [...this.state.persons]; 
+    // Above code // you can use either ways to copy the persons array 
+
+    persons.splice(personIndex, 1);
+    this.setState({persons : persons});
   }
 
   togglePersonsHandler = () => {
@@ -106,16 +193,13 @@ class App extends Component {
     if(this.state.showPersons){
       persons = (
         <div>
-              <Person 
-                name={this.state.persons[0].name} 
-                age ={this.state.persons[0].age}/>
-              <Person 
-                name={this.state.persons[1].name} 
-                age ={this.state.persons[1].age} click = {this.switchNameHandler.bind(this, 'Lina')}
-                changed={this.nameChangeHandler}>My Hobby : racing </Person> 
-              <Person 
-                name={this.state.persons[2].name} 
-                age ={this.state.persons[2].age}/>
+          {this.state.persons.map((person, index) => {
+            return <Person 
+            click={() => this.deletePersonHandler(index)}
+            name={person.name} 
+            age={person.age} 
+            key={} />
+          })}
             </div> 
       );
     }
@@ -127,14 +211,9 @@ class App extends Component {
         <button 
           style={style}
           onClick = {this.togglePersonsHandler} >Toggle</button>
-
           {persons}
       </div>
     );
   }
 }
-
 export default App;
-
-// { 
-//             this.state.showPersons === true ? : null}
