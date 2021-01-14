@@ -1,7 +1,7 @@
 // import React, { useState } from 'react';
 import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons';
 // import person from './Person/Person';
 
 
@@ -138,9 +138,9 @@ import Person from './Person/Person';
 class App extends Component {
   state = {
     persons: [
-      { name: "Max", age: 28 },
-      { name : "Manu", age : 29 },
-      { name : "Step", age : 26 }
+      { id: 'a', name: "Max", age: 28 },
+      { id: 'd', name : "Manu", age : 29 },
+      { id: 's', name : "Step", age : 26 }
     ],
     otherState: "some other value",
     showPersons: false
@@ -155,14 +155,23 @@ class App extends Component {
     ]})
   }
 
-  nameChangeHandler = (event) =>{
-    console.log(event.target.value);
-    this.setState({ 
-      persons : [
-        { name:  "Max", age: 28 },
-        { name : event.target.value , age : 29 },
-        { name : "Step", age : 26 }
-    ]})
+  nameChangeHandler = (event, id) =>{
+    const personIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
+    });
+
+    const person = {
+      ...this.state.persons[personIndex]
+    };
+    // const person = Object.assign({}, this.state.persons[personIndex]); // alt ways to do the same code above
+    
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+
+    // console.log(event.target.value);
+    this.setState({persons: persons});
   }
 
   deletePersonHandler = (personIndex) => {
@@ -193,14 +202,12 @@ class App extends Component {
     if(this.state.showPersons){
       persons = (
         <div>
-          {this.state.persons.map((person, index) => {
-            return <Person 
-            click={() => this.deletePersonHandler(index)}
-            name={person.name} 
-            age={person.age} 
-            key={} />
-          })}
-            </div> 
+        <Persons 
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangeHandler}
+        />
+        </div> 
       );
     }
 
